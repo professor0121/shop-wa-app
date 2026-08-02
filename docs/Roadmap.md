@@ -20,8 +20,8 @@
 | 06    | Database                | Completed | 100%     | 2026-08-02      |
 | 07    | Authentication          | Completed | 100%     | 2026-08-02      |
 | 08    | Shopify OAuth           | Completed | 100%     | 2026-08-02      |
-| 09    | Session Management      | Pending   | 0%       | TBD             |
-| 10    | Webhooks                | Pending   | 0%       | TBD             |
+| 09    | Session Management      | Completed | 100%     | 2026-08-02      |
+| 10    | Webhooks                | Completed | 100%     | 2026-08-02      |
 | 11    | Customers               | Pending   | 0%       | TBD             |
 | 12    | Orders                  | Pending   | 0%       | TBD             |
 | 13    | Products                | Pending   | 0%       | TBD             |
