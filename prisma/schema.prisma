@@ -130,3 +130,18 @@ model Checkout {
 
   @@index([shop])
 }
+
+model Product {
+  id          String   @id // Shopify Product ID (e.g. gid://shopify/Product/12345)
+  shop        String
+  title       String
+  handle      String
+  description String?  // bodyHtml from Shopify webhook
+  status      String   // e.g. active, draft, archived
+  vendor      String?
+  productType String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([shop])
+}

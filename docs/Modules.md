@@ -73,3 +73,8 @@
 
 - **Objective**: Subscription plans and usage charges via Shopify RecurringCharge and UsageCharge APIs.
 - **Dependencies**: Shopify OAuth Module, Database Module.
+
+## 14. Product Module
+
+- **Objective**: Synchronize and cache products from Shopify catalog for campaigns, templates, and automations lookup.
+- **Dependencies**: Database Module, Webhook Module.

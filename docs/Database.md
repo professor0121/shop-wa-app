@@ -126,3 +126,66 @@ model MessageLog {
   @@index([campaignId])
 }
 ```
+
+### 7. Order Table
+
+Tracks synced order records from Shopify.
+
+```prisma
+model Order {
+  id           String   @id // Shopify Order ID (e.g. gid://shopify/Order/12345)
+  shop         String
+  phone        String   // E.164 format
+  email        String?
+  totalPrice   String
+  currencyCode String
+  customerId   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([shop])
+}
+```
+
+### 8. Checkout Table
+
+Tracks synced checkout checkout sessions from Shopify.
+
+```prisma
+model Checkout {
+  id                 String    @id // Shopify Checkout ID or token
+  shop               String
+  phone              String   // E.164 format
+  email              String?
+  totalPrice         String
+  currencyCode       String
+  completed          Boolean   @default(false)
+  completedAt        DateTime?
+  abandonedEmailSent Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([shop])
+}
+```
+
+### 9. Product Table
+
+Caches products from the merchant's Shopify catalog.
+
+```prisma
+model Product {
+  id          String   @id // Shopify Product ID (e.g. gid://shopify/Product/12345)
+  shop        String
+  title       String
+  handle      String
+  description String?  // bodyHtml from Shopify webhook
+  status      String   // e.g. active, draft, archived
+  vendor      String?
+  productType String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([shop])
+}
+```

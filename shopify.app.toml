@@ -68,6 +68,18 @@ api_version = "2026-10"
   uri = "/webhooks/checkouts/update"
   topics = [ "checkouts/update" ]
 
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/products/create"
+  topics = [ "products/create" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/products/update"
+  topics = [ "products/update" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/products/delete"
+  topics = [ "products/delete" ]
+
 [auth]
 redirect_urls = [ "https://example.com/api/auth" ]
 
