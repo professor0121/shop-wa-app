@@ -5,30 +5,98 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
-// enough when changing adapters.
-// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
 datasource db {
-  provider = "sqlite"
-  url      = "file:dev.sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Session {
-  id            String    @id
-  shop          String
-  state         String
-  isOnline      Boolean   @default(false)
-  scope         String?
-  expires       DateTime?
-  accessToken   String
-  userId        BigInt?
-  firstName     String?
-  lastName      String?
-  email         String?
-  accountOwner  Boolean   @default(false)
-  locale        String?
-  collaborator  Boolean?  @default(false)
-  emailVerified Boolean?  @default(false)
+  id                  String    @id
+  shop                String
+  state               String
+  isOnline            Boolean   @default(false)
+  scope               String?
+  expires             DateTime?
+  accessToken         String
+  userId              BigInt?
+  firstName           String?
+  lastName            String?
+  email               String?
+  accountOwner        Boolean   @default(false)
+  locale              String?
+  collaborator        Boolean?  @default(false)
+  emailVerified       Boolean?  @default(false)
   refreshToken        String?
   refreshTokenExpires DateTime?
+}
+
+model ShopConfig {
+  id             String   @id @default(uuid())
+  shop           String   @unique
+  whatsappToken  String? // encrypted Meta Cloud API token
+  phoneNumberId  String? // Meta WhatsApp Phone ID
+  wabaId         String? // WhatsApp Business Account ID
+  optInKeywords  String   @default("START,SUBSCRIBE")
+  optOutKeywords String   @default("STOP,UNSUBSCRIBE")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Customer {
+  id         String    @id // Shopify Customer ID (e.g. gid://shopify/Customer/12345)
+  shop       String
+  phone      String // E.164 format (e.g. +1234567890)
+  firstName  String?
+  lastName   String?
+  optedIn    Boolean   @default(true)
+  optedInAt  DateTime?
+  optedOutAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([shop, phone])
+  @@index([shop])
+}
+
+model Template {
+  id         String   @id // Meta Template ID
+  shop       String
+  name       String
+  language   String
+  category   String
+  status     String
+  components Json // holds header, body, button structure
+  updatedAt  DateTime @updatedAt
+
+  @@unique([shop, name, language])
+}
+
+model Campaign {
+  id               String    @id @default(uuid())
+  shop             String
+  name             String
+  templateName     String
+  templateLanguage String
+  status           String // DRAFT, SCHEDULED, PROCESSING, COMPLETED, FAILED
+  scheduledAt      DateTime?
+  sentCount        Int       @default(0)
+  deliveredCount   Int       @default(0)
+  readCount        Int       @default(0)
+  failedCount      Int       @default(0)
+  createdAt        DateTime  @default(now())
+}
+
+model MessageLog {
+  id           String   @id // Meta Message ID (wamid.XYZ...)
+  shop         String
+  phone        String
+  direction    String // INBOUND, OUTBOUND
+  status       String // SENT, DELIVERED, READ, FAILED
+  errorMessage String?
+  body         String?
+  campaignId   String?
+  createdAt    DateTime @default(now())
+
+  @@index([shop, phone])
+  @@index([campaignId])
 }
