@@ -1,0 +1,14 @@
+# Cross-Module Documentation References
+
+## Documentation Map
+
+| Source File | References | Target File | Purpose |
+|-------------|------------|-------------|---------|
+| [Architecture.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Architecture.md) | [Modules.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Modules.md) | Modules | Explains how layers partition the functional modules. |
+| [Architecture.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Architecture.md) | [Database.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Database.md) | Database | Describes repository data storage mapping. |
+| [API.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/API.md) | [Security.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Security.md) | Security | Details how webhooks and API endpoints are authenticated. |
+| [Database.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Database.md) | [Architecture.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Architecture.md) | Architecture | Documents index structure mapping to workers and query paths. |
+| [DevelopmentGuide.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/DevelopmentGuide.md) | [Database.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Database.md) | Database | Provides developer migration commands. |
+| [Testing.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Testing.md) | [DevelopmentGuide.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/DevelopmentGuide.md) | Development Guide | Explains runner setup and env configuration. |
+| [Roadmap.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Roadmap.md) | [Progress.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Progress.md) | Progress | Synchronizes task completion stages. |
+| [Progress.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Progress.md) | [Roadmap.md](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Roadmap.md) | Roadmap | Maps back current milestones to overall phases. |
