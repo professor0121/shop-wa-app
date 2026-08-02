@@ -7,7 +7,7 @@ name = "shop-whatsapp"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_customers"
+scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_customers,read_orders,read_checkouts"
 
 [product.metafields.app.demo_info]
 type = "single_line_text_field"
@@ -55,6 +55,18 @@ api_version = "2026-10"
   [[webhooks.subscriptions]]
   uri = "/webhooks/customers/delete"
   topics = [ "customers/delete" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/orders/create"
+  topics = [ "orders/create" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/checkouts/create"
+  topics = [ "checkouts/create" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/checkouts/update"
+  topics = [ "checkouts/update" ]
 
 [auth]
 redirect_urls = [ "https://example.com/api/auth" ]
