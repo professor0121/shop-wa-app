@@ -44,29 +44,29 @@ api_version = "2026-10"
   uri = "/webhooks/app/scopes_update"
   topics = [ "app/scopes_update" ]
 
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/customers/create"
-  topics = [ "customers/create" ]
+#  [[webhooks.subscriptions]]
+#  uri = "/webhooks/customers/create"
+#  topics = [ "customers/create" ]
 
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/customers/update"
-  topics = [ "customers/update" ]
+#  [[webhooks.subscriptions]]
+#  uri = "/webhooks/customers/update"
+#  topics = [ "customers/update" ]
 
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/customers/delete"
-  topics = [ "customers/delete" ]
+#  [[webhooks.subscriptions]]
+#  uri = "/webhooks/customers/delete"
+#  topics = [ "customers/delete" ]
 
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/orders/create"
-  topics = [ "orders/create" ]
+#  [[webhooks.subscriptions]]
+#  uri = "/webhooks/orders/create"
+#  topics = [ "orders/create" ]
 
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/checkouts/create"
-  topics = [ "checkouts/create" ]
+#  [[webhooks.subscriptions]]
+#  uri = "/webhooks/checkouts/create"
+#  topics = [ "checkouts/create" ]
 
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/checkouts/update"
-  topics = [ "checkouts/update" ]
+#  [[webhooks.subscriptions]]
+#  uri = "/webhooks/checkouts/update"
+#  topics = [ "checkouts/update" ]
 
   [[webhooks.subscriptions]]
   uri = "/webhooks/products/create"

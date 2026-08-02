@@ -25,8 +25,8 @@
 | 11    | Customers               | Completed | 100%     | 2026-08-02      |
 | 12    | Orders                  | Completed | 100%     | 2026-08-02      |
 | 13    | Products                | Completed | 100%     | 2026-08-02      |
-| 14    | Templates               | Pending   | 0%       | TBD             |
-| 15    | WhatsApp Integration    | Pending   | 0%       | TBD             |
+| 14    | Templates               | Completed | 100%     | 2026-08-02      |
+| 15    | WhatsApp Integration    | Completed | 100%     | 2026-08-02      |
 | 16    | Queue System            | Pending   | 0%       | TBD             |
 | 17    | Automations             | Pending   | 0%       | TBD             |
 | 18    | Campaigns               | Pending   | 0%       | TBD             |
