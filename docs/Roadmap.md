@@ -27,8 +27,8 @@
 | 13    | Products                | Completed | 100%     | 2026-08-02      |
 | 14    | Templates               | Completed | 100%     | 2026-08-02      |
 | 15    | WhatsApp Integration    | Completed | 100%     | 2026-08-02      |
-| 16    | Queue System            | Pending   | 0%       | TBD             |
-| 17    | Automations             | Pending   | 0%       | TBD             |
+| 16    | Queue System            | Completed | 100%     | 2026-08-02      |
+| 17    | Automations             | Completed | 100%     | 2026-08-02      |
 | 18    | Campaigns               | Pending   | 0%       | TBD             |
 | 19    | Dashboard               | Pending   | 0%       | TBD             |
 | 20    | Analytics               | Pending   | 0%       | TBD             |

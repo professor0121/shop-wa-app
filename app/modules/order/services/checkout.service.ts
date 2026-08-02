@@ -1,6 +1,7 @@
 import { checkoutRepository, CheckoutRepository } from '../repositories/checkout.repository';
 import { checkoutWebhookPayloadSchema } from '../validations/order.validation';
 import { customerService } from '../../customer/services/customer.service';
+import { automationService } from '../../automation/services/automation.service';
 import type { Checkout } from '@prisma/client';
 
 export class CheckoutService {
@@ -53,7 +54,7 @@ export class CheckoutService {
       return null;
     }
 
-    return this.repository.upsertCheckout({
+    const checkout = await this.repository.upsertCheckout({
       id: payload.token,
       shop,
       phone: normalizedPhone,
@@ -62,6 +63,12 @@ export class CheckoutService {
       currencyCode: payload.currency,
       completed: false,
     });
+
+    if (checkout) {
+      await automationService.scheduleAbandonedCheckout(shop, checkout);
+    }
+
+    return checkout;
   }
 
   async completeCheckout(token: string): Promise<void> {

@@ -1,13 +1,13 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { authenticate } from '../shopify.server';
-import { orderService } from '../modules/order/services/order.service';
+import { queueService } from '../modules/queue/services/queue.service';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { payload, shop, topic } = await authenticate.webhook(request);
 
   console.log(`Received ${topic} webhook for ${shop}`);
 
-  await orderService.syncOrder(shop, payload);
+  await queueService.enqueueJob('SYNC_ORDER', { shop, payload });
 
   return new Response();
 };

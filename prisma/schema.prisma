@@ -145,3 +145,17 @@ model Product {
 
   @@index([shop])
 }
+
+model Automation {
+  id               String   @id @default(uuid())
+  shop             String
+  triggerType      String   // e.g. ABANDONED_CHECKOUT
+  delayHours       Int      @default(24)
+  templateName     String
+  templateLanguage String
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([shop, triggerType])
+}

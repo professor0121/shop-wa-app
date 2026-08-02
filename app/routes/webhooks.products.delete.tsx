@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { authenticate } from '../shopify.server';
-import { productService } from '../modules/product/services/product.service';
 import { productDeleteWebhookPayloadSchema } from '../modules/product/validations/product.validation';
+import { queueService } from '../modules/queue/services/queue.service';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { payload, shop, topic } = await authenticate.webhook(request);
@@ -10,7 +10,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const parseResult = productDeleteWebhookPayloadSchema.safeParse(payload);
   if (parseResult.success) {
-    await productService.deleteProduct(shop, parseResult.data.id);
+    await queueService.enqueueJob('DELETE_PRODUCT', { shop, id: parseResult.data.id });
   } else {
     console.error(
       `[ProductDeleteWebhook] Invalid payload for shop ${shop}:`,

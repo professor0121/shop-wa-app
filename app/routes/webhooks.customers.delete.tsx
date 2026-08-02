@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { authenticate } from '../shopify.server';
-import { customerService } from '../modules/customer/services/customer.service';
+import { queueService } from '../modules/queue/services/queue.service';
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { payload, shop, topic } = await authenticate.webhook(request);
@@ -8,7 +8,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   console.log(`Received ${topic} webhook for ${shop}`);
 
   if (payload && payload.id) {
-    await customerService.deleteCustomer(shop, payload.id);
+    await queueService.enqueueJob('DELETE_CUSTOMER', { shop, id: payload.id });
   }
 
   return new Response();
