@@ -1,6 +1,7 @@
 # Database Schema Specification
 
 ## Reference System
+
 - [Architecture](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Architecture.md)
 - [Modules](file:///c:/Users/ravik/OneDrive/Desktop/shop/docs/Modules.md)
 
@@ -9,6 +10,7 @@
 ## Schema Design (Prisma / PostgreSQL)
 
 ### 1. Session Table
+
 Tracks active merchant login credentials.
 
 ```prisma
@@ -25,6 +27,7 @@ model Session {
 ```
 
 ### 2. Shop Configuration Table
+
 Stores WhatsApp details, token configuration, and app plan tier.
 
 ```prisma
@@ -42,6 +45,7 @@ model ShopConfig {
 ```
 
 ### 3. Customer Table
+
 Tracks opt-in statuses and customer contact records synced from Shopify.
 
 ```prisma
@@ -63,6 +67,7 @@ model Customer {
 ```
 
 ### 4. Template Table
+
 Stores cached templates from WhatsApp Cloud API.
 
 ```prisma
@@ -81,6 +86,7 @@ model Template {
 ```
 
 ### 5. Campaign Table
+
 Stores bulk broadcasts metadata.
 
 ```prisma
@@ -101,6 +107,7 @@ model Campaign {
 ```
 
 ### 6. Message Log Table
+
 Factual record of all inbound/outbound WhatsApp messages.
 
 ```prisma
