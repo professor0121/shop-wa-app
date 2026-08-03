@@ -3,7 +3,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { Form, useActionData, useLoaderData, useFetcher } from 'react-router';
 import { useAppBridge } from '@shopify/app-bridge-react';
 import { authenticate } from '../shopify.server';
-import type { Template, Automation } from '@prisma/client';
+import type { Template } from '@prisma/client';
 import prisma from '../db.server';
 import { decrypt, encrypt } from '../core/security/encryption';
 
@@ -91,13 +91,12 @@ export default function Index() {
     shopConfig,
     templates: rawTemplates,
     campaigns: initialCampaigns,
-    automations: rawAutomations,
+    automations,
     customerCount,
     optedInCount,
   } = useLoaderData<typeof loader>();
 
   const templates = rawTemplates as Template[];
-  const automations = rawAutomations as Automation[];
 
   const actionData = useActionData() as any;
   const shopify = useAppBridge();
@@ -123,7 +122,7 @@ export default function Index() {
   const [scheduledAt, setScheduledAt] = useState('');
 
   // Automation form state
-  const checkoutAutomation = automations.find((a) => a.triggerType === 'ABANDONED_CHECKOUT');
+  const checkoutAutomation = automations.find((a: any) => a.triggerType === 'ABANDONED_CHECKOUT');
   const [autoActive, setAutoActive] = useState(checkoutAutomation ? checkoutAutomation.active : false);
   const [autoTemplate, setAutoTemplate] = useState(checkoutAutomation ? checkoutAutomation.templateName : '');
   const [autoLanguage, setAutoLanguage] = useState(checkoutAutomation ? checkoutAutomation.templateLanguage : 'en_US');
@@ -402,7 +401,7 @@ export default function Index() {
                     </tr>
                   </thead>
                   <tbody>
-                    {initialCampaigns.map((c) => (
+                    {initialCampaigns.map((c: any) => (
                       <tr key={c.id} style={{ borderBottom: '1px solid #e1e3e5' }}>
                         <td style={{ padding: '8px', fontWeight: 'bold' }}>{c.name}</td>
                         <td style={{ padding: '8px' }}>{c.templateName} ({c.templateLanguage})</td>
