@@ -3,21 +3,23 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { Form, useActionData, useLoaderData, useFetcher } from 'react-router';
 import { useAppBridge } from '@shopify/app-bridge-react';
 import { authenticate } from '../shopify.server';
-import type { Template } from '@prisma/client';
+import type { Template, Automation } from '@prisma/client';
 import prisma from '../db.server';
 import { decrypt, encrypt } from '../core/security/encryption';
+import { analyticsService } from '../modules/analytics/services/analytics.service';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { session } = await authenticate.admin(request);
   const shop = session.shop;
 
-  const [shopConfig, templates, campaigns, automations, customerCount, optedInCount] = await Promise.all([
+  const [shopConfig, templates, campaigns, automations, customerCount, optedInCount, analytics] = await Promise.all([
     prisma.shopConfig.findUnique({ where: { shop } }),
     prisma.template.findMany({ where: { shop }, orderBy: { updatedAt: 'desc' } }),
     prisma.campaign.findMany({ where: { shop }, orderBy: { createdAt: 'desc' } }),
     prisma.automation.findMany({ where: { shop } }),
     prisma.customer.count({ where: { shop } }),
     prisma.customer.count({ where: { shop, optedIn: true } }),
+    analyticsService.getDashboardMetrics(shop),
   ]);
 
   let decryptedToken = '';
@@ -36,6 +38,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     automations,
     customerCount,
     optedInCount,
+    analytics,
   };
 };
 
@@ -91,13 +94,14 @@ export default function Index() {
     shopConfig,
     templates: rawTemplates,
     campaigns: initialCampaigns,
-    automations,
+    automations: rawAutomations,
     customerCount,
     optedInCount,
+    analytics,
   } = useLoaderData<typeof loader>();
 
   const templates = rawTemplates as Template[];
-
+  const automations = rawAutomations as Automation[];
   const actionData = useActionData() as any;
   const shopify = useAppBridge();
 
@@ -267,7 +271,7 @@ export default function Index() {
       {/* Overview Tab */}
       {activeTab === 'overview' && (
         <s-stack direction="block" gap="base">
-          {/* KPI Dashboard Cards */}
+          {/* KPI Dashboard Cards - Row 1: General Stats */}
           <div style={{ width: '100%' }}>
             <s-stack direction="inline" gap="base">
               <div style={{ flex: 1, minWidth: '200px' }}>
@@ -296,6 +300,42 @@ export default function Index() {
             </s-stack>
           </div>
 
+          {/* KPI Dashboard Cards - Row 2: WhatsApp Analytics */}
+          <div style={{ width: '100%' }}>
+            <s-stack direction="inline" gap="base">
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <s-box padding="base" borderWidth="base" borderRadius="base">
+                  <s-heading>Delivery Rate</s-heading>
+                  <h2 style={{ fontSize: '2rem', color: '#108548', margin: '0.5rem 0 0 0' }}>
+                    {analytics.metrics.deliveryRate}%
+                    <span style={{ fontSize: '0.875rem', fontWeight: 'normal', color: '#6d7175', marginLeft: '6px' }}>
+                      ({analytics.metrics.deliveryCount} / {analytics.metrics.totalOutbound})
+                    </span>
+                  </h2>
+                </s-box>
+              </div>
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <s-box padding="base" borderWidth="base" borderRadius="base">
+                  <s-heading>Read Rate (Open Rate)</s-heading>
+                  <h2 style={{ fontSize: '2rem', color: '#005ea2', margin: '0.5rem 0 0 0' }}>
+                    {analytics.metrics.readRate}%
+                    <span style={{ fontSize: '0.875rem', fontWeight: 'normal', color: '#6d7175', marginLeft: '6px' }}>
+                      ({analytics.metrics.readCount} read)
+                    </span>
+                  </h2>
+                </s-box>
+              </div>
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <s-box padding="base" borderWidth="base" borderRadius="base">
+                  <s-heading>Inbound Replies</s-heading>
+                  <h2 style={{ fontSize: '2rem', margin: '0.5rem 0 0 0' }}>
+                    {analytics.metrics.inboundCount}
+                  </h2>
+                </s-box>
+              </div>
+            </s-stack>
+          </div>
+
           <s-section heading="System Integration Status">
             <s-paragraph>
               This app automatically syncs Shopify customer data and schedules Meta template reminders based on events (like cart abandonment). You can manage active template files, review metrics, and execute bulk marketing campaigns directly.
@@ -308,6 +348,46 @@ export default function Index() {
                 </s-button>
               </s-stack>
             </div>
+          </s-section>
+
+          {/* Recent WhatsApp Dispatch Activity Log */}
+          <s-section heading="Recent WhatsApp Dispatch Activity">
+            {analytics.recentLogs.length === 0 ? (
+              <s-paragraph>No recent message activity logged.</s-paragraph>
+            ) : (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid #e1e3e5' }}>
+                      <th style={{ padding: '8px' }}>Phone</th>
+                      <th style={{ padding: '8px' }}>Direction</th>
+                      <th style={{ padding: '8px' }}>Status</th>
+                      <th style={{ padding: '8px' }}>Content</th>
+                      <th style={{ padding: '8px' }}>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {analytics.recentLogs.map((log: any) => (
+                      <tr key={log.id} style={{ borderBottom: '1px solid #e1e3e5' }}>
+                        <td style={{ padding: '8px', fontWeight: 'bold' }}>{log.phone}</td>
+                        <td style={{ padding: '8px' }}>
+                          <s-badge tone={log.direction === 'INBOUND' ? 'neutral' : 'info'}>
+                            {log.direction}
+                          </s-badge>
+                        </td>
+                        <td style={{ padding: '8px' }}>
+                          <s-badge tone={getBadgeTone(log.status)}>{log.status}</s-badge>
+                        </td>
+                        <td style={{ padding: '8px', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {log.body || ''}
+                        </td>
+                        <td style={{ padding: '8px' }}>{new Date(log.createdAt).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </s-section>
         </s-stack>
       )}

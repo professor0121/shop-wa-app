@@ -44,7 +44,12 @@ async function runSandbox() {
 
   // Clean up any pre-existing templates for this test
   await prisma.template.deleteMany({
-    where: { shop },
+    where: {
+      OR: [
+        { shop },
+        { id: 'mock-template-id-777' }
+      ]
+    },
   });
 
   // 3. Enqueue the templates sync job
