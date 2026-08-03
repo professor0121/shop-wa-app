@@ -10,8 +10,6 @@ const configSchema = z.object({
   ENCRYPTION_KEY: z
     .string()
     .length(64, 'ENCRYPTION_KEY must be a 64-character hex string (32 bytes)'),
-  META_APP_SECRET: z.string().min(1, 'META_APP_SECRET is required'),
-  META_VERIFY_TOKEN: z.string().min(1, 'META_VERIFY_TOKEN is required'),
 });
 
 export type Config = z.infer<typeof configSchema>;
@@ -25,8 +23,6 @@ export function loadConfig(): Config {
     DATABASE_URL: process.env.DATABASE_URL,
     REDIS_URL: process.env.REDIS_URL,
     ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
-    META_APP_SECRET: process.env.META_APP_SECRET,
-    META_VERIFY_TOKEN: process.env.META_VERIFY_TOKEN,
   });
 
   if (!result.success) {

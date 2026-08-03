@@ -9,6 +9,7 @@ import prisma from '../db.server';
 import { decrypt, encrypt } from '../core/security/encryption';
 import { analyticsService } from '../modules/analytics/services/analytics.service';
 import { notificationService } from '../modules/notification/services/notification.service';
+import crypto from 'crypto';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { session } = await authenticate.admin(request);
@@ -31,17 +32,46 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     notificationService.getNotifications(shop, { limit: 50 }),
   ]);
 
+  let finalShopConfig = shopConfig;
+  if (shopConfig && !shopConfig.metaVerifyToken) {
+    const generatedToken = `wh_${crypto.randomBytes(16).toString('hex')}`;
+    finalShopConfig = await prisma.shopConfig.update({
+      where: { shop },
+      data: { metaVerifyToken: generatedToken },
+    });
+  }
+
   let decryptedToken = '';
-  if (shopConfig && shopConfig.whatsappToken) {
-    try {
-      decryptedToken = decrypt(shopConfig.whatsappToken);
-    } catch (e) {
-      console.error('Failed to decrypt token:', e);
+  let decryptedAppSecret = '';
+  if (finalShopConfig) {
+    if (finalShopConfig.whatsappToken) {
+      try {
+        decryptedToken = decrypt(finalShopConfig.whatsappToken);
+      } catch (e) {
+        console.error('Failed to decrypt token:', e);
+      }
+    }
+    if (finalShopConfig.metaAppSecret) {
+      try {
+        decryptedAppSecret = decrypt(finalShopConfig.metaAppSecret);
+      } catch (e) {
+        console.error('Failed to decrypt app secret:', e);
+      }
     }
   }
 
+  const url = new URL(request.url);
+  const appUrl = url.origin;
+
   return {
-    shopConfig: shopConfig ? { ...shopConfig, whatsappToken: decryptedToken } : null,
+    appUrl,
+    shopConfig: finalShopConfig
+      ? {
+        ...finalShopConfig,
+        whatsappToken: decryptedToken,
+        metaAppSecret: decryptedAppSecret,
+      }
+      : null,
     templates,
     campaigns,
     automations,
@@ -63,6 +93,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const whatsappToken = formData.get('whatsappToken') as string;
     const phoneNumberId = formData.get('phoneNumberId') as string;
     const wabaId = formData.get('wabaId') as string;
+    const metaAppSecret = formData.get('metaAppSecret') as string;
     const optOutKeywords = (formData.get('optOutKeywords') as string) || 'STOP,UNSUBSCRIBE';
 
     if (!whatsappToken || !phoneNumberId || !wabaId) {
@@ -71,6 +102,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     try {
       const encryptedToken = encrypt(whatsappToken);
+      const encryptedAppSecret = metaAppSecret ? encrypt(metaAppSecret) : null;
+
+      // Get existing config or generate new verification token
+      const existingConfig = await prisma.shopConfig.findUnique({ where: { shop } });
+      const metaVerifyToken = existingConfig?.metaVerifyToken || `wh_${crypto.randomBytes(16).toString('hex')}`;
 
       const config = await prisma.shopConfig.upsert({
         where: { shop },
@@ -78,6 +114,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           whatsappToken: encryptedToken,
           phoneNumberId,
           wabaId,
+          metaAppSecret: encryptedAppSecret,
+          metaVerifyToken,
           optOutKeywords,
         },
         create: {
@@ -85,6 +123,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           whatsappToken: encryptedToken,
           phoneNumberId,
           wabaId,
+          metaAppSecret: encryptedAppSecret,
+          metaVerifyToken,
           optOutKeywords,
         },
       });
@@ -93,6 +133,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     } catch (error: any) {
       console.error('[ActionDashboard] Settings save failed:', error);
       return Response.json({ error: error.message || 'Failed to save settings' }, { status: 500 });
+    }
+  }
+
+  if (actionType === 'generateVerifyToken') {
+    try {
+      const generatedToken = `wh_${crypto.randomBytes(16).toString('hex')}`;
+      const config = await prisma.shopConfig.upsert({
+        where: { shop },
+        update: {
+          metaVerifyToken: generatedToken,
+        },
+        create: {
+          shop,
+          metaVerifyToken: generatedToken,
+        },
+      });
+      return Response.json({ success: true, metaVerifyToken: generatedToken });
+    } catch (error: any) {
+      console.error('[ActionDashboard] Generate verify token failed:', error);
+      return Response.json({ error: error.message || 'Failed to generate token' }, { status: 500 });
     }
   }
 
@@ -124,6 +184,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Index() {
   const {
+    appUrl,
     shopConfig,
     templates: rawTemplates,
     campaigns: initialCampaigns,
@@ -148,11 +209,14 @@ export default function Index() {
   const campaignsFetcher = useFetcher() as any;
   const automationsFetcher = useFetcher() as any;
   const notificationsFetcher = useFetcher() as any;
+  const settingsFetcher = useFetcher() as any;
 
   // Settings form state
   const [token, setToken] = useState(shopConfig?.whatsappToken || '');
   const [phoneId, setPhoneId] = useState(shopConfig?.phoneNumberId || '');
   const [wabaIdVal, setWabaIdVal] = useState(shopConfig?.wabaId || '');
+  const [appSecret, setAppSecret] = useState(shopConfig?.metaAppSecret || '');
+  const [verifyToken, setVerifyToken] = useState(shopConfig?.metaVerifyToken || '');
   const [optOutWords, setOptOutWords] = useState(shopConfig?.optOutKeywords || 'STOP,UNSUBSCRIBE');
 
   // Campaign form state
@@ -179,6 +243,23 @@ export default function Index() {
       shopify.toast.show(`Error: ${actionData.error}`);
     }
   }, [actionData, shopify]);
+
+  // Effect to handle Settings Fetcher (Generate Verify Token)
+  useEffect(() => {
+    if (settingsFetcher.data?.success && settingsFetcher.data?.metaVerifyToken) {
+      setVerifyToken(settingsFetcher.data.metaVerifyToken);
+      shopify.toast.show('New Verify Token generated and saved');
+    } else if (settingsFetcher.data?.error) {
+      shopify.toast.show(`Failed to generate token: ${settingsFetcher.data.error}`);
+    }
+  }, [settingsFetcher.data, shopify]);
+
+  // Sync state if shopConfig updates
+  useEffect(() => {
+    if (shopConfig?.metaVerifyToken) {
+      setVerifyToken(shopConfig.metaVerifyToken);
+    }
+  }, [shopConfig?.metaVerifyToken]);
 
   // Effect to handle Template Sync Notification
   useEffect(() => {
@@ -239,6 +320,13 @@ export default function Index() {
   const handleMarkAllRead = () => {
     notificationsFetcher.submit(
       { actionType: 'markAllNotificationsRead' },
+      { method: 'POST' }
+    );
+  };
+
+  const handleGenerateVerifyToken = () => {
+    settingsFetcher.submit(
+      { actionType: 'generateVerifyToken' },
       { method: 'POST' }
     );
   };
@@ -698,6 +786,56 @@ export default function Index() {
       {activeTab === 'settings' && (
         <s-stack direction="block" gap="base">
           <s-section heading="WhatsApp Settings Configuration">
+            <div style={{ marginBottom: '1rem' }}>
+              <s-box padding="base" background="subdued" borderWidth="base" borderRadius="base">
+                <s-stack direction="block" gap="small">
+                  <s-heading>Meta Webhook Integration Helper</s-heading>
+                  <s-paragraph>
+                    To receive customer messages and message status reports (sent, delivered, read), configure a Webhook in the Meta Developer Portal under <strong>WhatsApp &gt; Configuration</strong> with:
+                  </s-paragraph>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', margin: '0.5rem 0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: '#f4f6f8', padding: '0.5rem 0.75rem', borderRadius: '4px' }}>
+                      <span style={{ wordBreak: 'break-all' }}>
+                        <strong>Callback URL:</strong> <code style={{ marginLeft: '0.25rem' }}>{appUrl}/api/webhooks/whatsapp</code>
+                      </span>
+                      <s-button onClick={() => {
+                        navigator.clipboard.writeText(`${appUrl}/api/webhooks/whatsapp`);
+                        shopify.toast.show('Callback URL copied to clipboard');
+                      }} variant="tertiary">
+                        Copy URL
+                      </s-button>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: '#f4f6f8', padding: '0.5rem 0.75rem', borderRadius: '4px' }}>
+                      <span style={{ wordBreak: 'break-all' }}>
+                        <strong>Verify Token:</strong> <code style={{ marginLeft: '0.25rem' }}>{verifyToken || '(Click Generate Token)'}</code>
+                      </span>
+                      <s-stack direction="inline" gap="small">
+                        <s-button onClick={handleGenerateVerifyToken} {...(settingsFetcher.state === 'submitting' ? { loading: true } : {})}>
+                          Generate Token
+                        </s-button>
+                        <s-button onClick={() => {
+                          if (!verifyToken) {
+                            shopify.toast.show('Please generate a Verify Token first');
+                            return;
+                          }
+                          navigator.clipboard.writeText(verifyToken);
+                          shopify.toast.show('Verify Token copied to clipboard');
+                        }} variant="tertiary">
+                          Copy Token
+                        </s-button>
+                      </s-stack>
+                    </div>
+                  </div>
+
+                  <p style={{ fontSize: '0.85rem', color: 'gray', margin: 0 }}>
+                    <em>Tip: Our system automatically matches incoming webhook data to your store dynamically. You do not need to append <code>?shop=...</code> to the Callback URL.</em>
+                  </p>
+                </s-stack>
+              </s-box>
+            </div>
+
             <Form method="post">
               <input type="hidden" name="actionType" value="updateSettings" />
               <s-stack direction="block" gap="base">
@@ -724,6 +862,14 @@ export default function Index() {
                   onChange={(e) => setWabaIdVal(e.currentTarget.value)}
                   required
                 ></s-text-field>
+
+                <s-password-field
+                  label="Meta App Secret"
+                  name="metaAppSecret"
+                  value={appSecret}
+                  onChange={(e) => setAppSecret(e.currentTarget.value)}
+                ></s-password-field>
+
 
                 <s-text-field
                   label="Opt-Out Keywords (Comma Separated)"
