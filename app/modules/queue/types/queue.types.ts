@@ -6,7 +6,8 @@ export type JobType =
   | 'SYNC_ORDER'
   | 'SYNC_CHECKOUT'
   | 'SYNC_TEMPLATES'
-  | 'PROCESS_AUTOMATION';
+  | 'PROCESS_AUTOMATION'
+  | 'PROCESS_CAMPAIGN';
 
 export interface SyncProductPayload {
   shop: string;
@@ -49,6 +50,11 @@ export interface ProcessAutomationPayload {
   checkoutUpdatedAt: string; // ISO string representation
 }
 
+export interface ProcessCampaignPayload {
+  shop: string;
+  campaignId: string;
+}
+
 export type JobPayloads = {
   SYNC_PRODUCT: SyncProductPayload;
   DELETE_PRODUCT: DeleteProductPayload;
@@ -58,4 +64,5 @@ export type JobPayloads = {
   SYNC_CHECKOUT: SyncCheckoutPayload;
   SYNC_TEMPLATES: SyncTemplatesPayload;
   PROCESS_AUTOMATION: ProcessAutomationPayload;
+  PROCESS_CAMPAIGN: ProcessCampaignPayload;
 };

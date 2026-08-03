@@ -5,6 +5,7 @@ import { orderService } from '../../order/services/order.service';
 import { checkoutService } from '../../order/services/checkout.service';
 import { templateService } from '../../template/services/template.service';
 import { automationService } from '../../automation/services/automation.service';
+import { campaignService } from '../../campaign/services/campaign.service';
 import { JobType } from '../types/queue.types';
 
 const POLL_INTERVAL = 2000; // Poll database every 2 seconds
@@ -47,6 +48,9 @@ async function processJob(job: any) {
           data.checkoutUpdatedAt
         );
       }
+      break;
+    case 'PROCESS_CAMPAIGN':
+      await campaignService.processCampaign(data.shop, data.campaignId);
       break;
     default:
       console.warn(`[QueueWorker] Unknown job type: ${type}`);
