@@ -1,16 +1,26 @@
 import { useEffect, useState } from 'react';
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { Form, useActionData, useLoaderData, useFetcher } from 'react-router';
+import { Form, useActionData, useLoaderData, useFetcher, redirect } from 'react-router';
 import { useAppBridge } from '@shopify/app-bridge-react';
 import { authenticate } from '../shopify.server';
+import { MONTHLY_PLAN } from '../constants';
 import type { Template, Automation } from '@prisma/client';
 import prisma from '../db.server';
 import { decrypt, encrypt } from '../core/security/encryption';
 import { analyticsService } from '../modules/analytics/services/analytics.service';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { session } = await authenticate.admin(request);
+  const { session, billing } = await authenticate.admin(request);
   const shop = session.shop;
+
+  const billingCheck = await billing.check({
+    plans: [MONTHLY_PLAN],
+    isTest: true,
+  });
+
+  if (!billingCheck.hasActivePayment) {
+    throw redirect('/app/billing');
+  }
 
   const [shopConfig, templates, campaigns, automations, customerCount, optedInCount, analytics] = await Promise.all([
     prisma.shopConfig.findUnique({ where: { shop } }),
