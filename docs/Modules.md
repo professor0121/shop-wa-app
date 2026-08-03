@@ -78,3 +78,8 @@
 
 - **Objective**: Synchronize and cache products from Shopify catalog for campaigns, templates, and automations lookup.
 - **Dependencies**: Database Module, Webhook Module.
+
+## 15. Notifications Module
+
+- **Objective**: Track system alerts, warnings, and success notifications (campaign completion, automation failures, credential issues) and display them to the merchant in a dedicated dashboard view.
+- **Dependencies**: Database Module, Campaign Module, Automation Module.

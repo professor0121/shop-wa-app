@@ -4,6 +4,7 @@ import { queueService } from '../../queue/services/queue.service';
 import { decrypt } from '../../../core/security/encryption';
 import prisma from '../../../db.server';
 import type { Checkout } from '@prisma/client';
+import { notificationService } from '../../notification/services/notification.service';
 
 export class AutomationService {
   private repository: AutomationRepository;
@@ -95,6 +96,12 @@ export class AutomationService {
 
     if (!config || !config.phoneNumberId || !config.whatsappToken) {
       console.warn(`[AutomationService] Incomplete WhatsApp configuration for shop: ${shop}. Skipping.`);
+      await notificationService.createNotification(
+        shop,
+        'Automation Skipped',
+        'Abandoned Checkout automation was skipped because your WhatsApp configuration is incomplete.',
+        'WARNING'
+      );
       return;
     }
 
@@ -148,6 +155,13 @@ export class AutomationService {
           body: `Template: ${automation.templateName} (${automation.templateLanguage})`,
         },
       });
+
+      await notificationService.createNotification(
+        shop,
+        'Automation Message Failed',
+        `Failed to send Abandoned Checkout reminder to ${checkout.phone}: ${error.message || 'Unknown error'}.`,
+        'ERROR'
+      );
     }
   }
 }

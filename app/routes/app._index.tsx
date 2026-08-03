@@ -4,10 +4,11 @@ import { Form, useActionData, useLoaderData, useFetcher, redirect } from 'react-
 import { useAppBridge } from '@shopify/app-bridge-react';
 import { authenticate } from '../shopify.server';
 import { billingService } from '../modules/billing/services/billing.service';
-import type { Template, Automation } from '@prisma/client';
+import type { Template, Automation, Notification } from '@prisma/client';
 import prisma from '../db.server';
 import { decrypt, encrypt } from '../core/security/encryption';
 import { analyticsService } from '../modules/analytics/services/analytics.service';
+import { notificationService } from '../modules/notification/services/notification.service';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { session } = await authenticate.admin(request);
@@ -19,7 +20,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     throw redirect('/app/billing');
   }
 
-  const [shopConfig, templates, campaigns, automations, customerCount, optedInCount, analytics] = await Promise.all([
+  const [shopConfig, templates, campaigns, automations, customerCount, optedInCount, analytics, notifications] = await Promise.all([
     prisma.shopConfig.findUnique({ where: { shop } }),
     prisma.template.findMany({ where: { shop }, orderBy: { updatedAt: 'desc' } }),
     prisma.campaign.findMany({ where: { shop }, orderBy: { createdAt: 'desc' } }),
@@ -27,6 +28,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     prisma.customer.count({ where: { shop } }),
     prisma.customer.count({ where: { shop, optedIn: true } }),
     analyticsService.getDashboardMetrics(shop),
+    notificationService.getNotifications(shop, { limit: 50 }),
   ]);
 
   let decryptedToken = '';
@@ -46,6 +48,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     customerCount,
     optedInCount,
     analytics,
+    notifications,
   };
 };
 
@@ -93,6 +96,29 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
   }
 
+  if (actionType === 'markNotificationRead') {
+    const id = formData.get('id') as string;
+    if (!id) {
+      return Response.json({ error: 'Notification ID is required.' }, { status: 400 });
+    }
+    const updated = await notificationService.markAsRead(shop, id);
+    return Response.json({ success: true, notification: updated });
+  }
+
+  if (actionType === 'deleteNotification') {
+    const id = formData.get('id') as string;
+    if (!id) {
+      return Response.json({ error: 'Notification ID is required.' }, { status: 400 });
+    }
+    const deleted = await notificationService.deleteNotification(shop, id);
+    return Response.json({ success: true, notification: deleted });
+  }
+
+  if (actionType === 'markAllNotificationsRead') {
+    await notificationService.markAllAsRead(shop);
+    return Response.json({ success: true });
+  }
+
   return Response.json({ error: 'Unknown action' }, { status: 400 });
 };
 
@@ -105,20 +131,23 @@ export default function Index() {
     customerCount,
     optedInCount,
     analytics,
+    notifications: rawNotifications,
   } = useLoaderData<typeof loader>();
 
   const templates = rawTemplates as Template[];
   const automations = rawAutomations as Automation[];
+  const notifications = (rawNotifications || []) as Notification[];
   const actionData = useActionData() as any;
   const shopify = useAppBridge();
 
   // Navigation tab state
-  const [activeTab, setActiveTab] = useState<'overview' | 'campaigns' | 'automations' | 'templates' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'campaigns' | 'automations' | 'templates' | 'settings' | 'notifications'>('overview');
 
   // Fetchers for background tasks
   const templatesFetcher = useFetcher() as any;
   const campaignsFetcher = useFetcher() as any;
   const automationsFetcher = useFetcher() as any;
+  const notificationsFetcher = useFetcher() as any;
 
   // Settings form state
   const [token, setToken] = useState(shopConfig?.whatsappToken || '');
@@ -181,6 +210,38 @@ export default function Index() {
       shopify.toast.show(`Automation failed: ${automationsFetcher.data.error}`);
     }
   }, [automationsFetcher.data, shopify]);
+
+  // Effect to handle Notification updates
+  useEffect(() => {
+    if (notificationsFetcher.data?.success) {
+      shopify.toast.show('Notifications updated');
+    } else if (notificationsFetcher.data?.error) {
+      shopify.toast.show(`Notification failed: ${notificationsFetcher.data.error}`);
+    }
+  }, [notificationsFetcher.data, shopify]);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const handleMarkRead = (id: string) => {
+    notificationsFetcher.submit(
+      { actionType: 'markNotificationRead', id },
+      { method: 'POST' }
+    );
+  };
+
+  const handleDeleteNotification = (id: string) => {
+    notificationsFetcher.submit(
+      { actionType: 'deleteNotification', id },
+      { method: 'POST' }
+    );
+  };
+
+  const handleMarkAllRead = () => {
+    notificationsFetcher.submit(
+      { actionType: 'markAllNotificationsRead' },
+      { method: 'POST' }
+    );
+  };
 
   const handleSyncTemplates = () => {
     templatesFetcher.submit({}, { method: 'POST', action: '/api/templates' });
@@ -270,6 +331,9 @@ export default function Index() {
             </s-button>
             <s-button onClick={() => setActiveTab('settings')} variant={activeTab === 'settings' ? 'primary' : 'tertiary'}>
               Settings
+            </s-button>
+            <s-button onClick={() => setActiveTab('notifications')} variant={activeTab === 'notifications' ? 'primary' : 'tertiary'}>
+              Notifications {unreadCount > 0 ? `(${unreadCount})` : ''}
             </s-button>
           </s-stack>
         </s-box>
@@ -673,6 +737,54 @@ export default function Index() {
               </s-stack>
             </Form>
           </s-section>
+        </s-stack>
+      )}
+
+      {/* Notifications Tab */}
+      {activeTab === 'notifications' && (
+        <s-stack direction="block" gap="base">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <s-heading>System Notifications & Alerts</s-heading>
+            {notifications.length > 0 && unreadCount > 0 && (
+              <s-button onClick={handleMarkAllRead}>Mark All as Read</s-button>
+            )}
+          </div>
+
+          {notifications.length === 0 ? (
+            <s-box padding="base" borderWidth="base" borderRadius="base">
+              <s-paragraph>No notifications found. System alerts and status updates will appear here.</s-paragraph>
+            </s-box>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {notifications.map((n) => (
+                <s-box key={n.id} padding="base" borderWidth="base" borderRadius="base">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap' }}>
+                    <div style={{ flex: 1, minWidth: '250px' }}>
+                      <s-stack direction="block" gap="base">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                          <s-heading>{n.title}</s-heading>
+                          <s-badge tone={n.type === 'SUCCESS' ? 'success' : n.type === 'ERROR' ? 'critical' : n.type === 'WARNING' ? 'warning' : 'info'}>
+                            {n.type}
+                          </s-badge>
+                          {!n.read && <s-badge tone="caution">Unread</s-badge>}
+                        </div>
+                        <s-paragraph>{n.message}</s-paragraph>
+                        <span style={{ color: '#6d7175', fontSize: '0.875rem' }}>
+                          {new Date(n.createdAt).toLocaleString()}
+                        </span>
+                      </s-stack>
+                    </div>
+                    <s-stack direction="inline" gap="base">
+                      {!n.read && (
+                        <s-button onClick={() => handleMarkRead(n.id)} variant="primary">Mark as Read</s-button>
+                      )}
+                      <s-button onClick={() => handleDeleteNotification(n.id)}>Delete</s-button>
+                    </s-stack>
+                  </div>
+                </s-box>
+              ))}
+            </div>
+          )}
         </s-stack>
       )}
     </s-page>

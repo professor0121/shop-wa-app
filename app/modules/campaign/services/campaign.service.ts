@@ -3,6 +3,7 @@ import { whatsAppService, WhatsAppService } from '../../whatsapp/services/whatsa
 import { queueService } from '../../queue/services/queue.service';
 import { decrypt } from '../../../core/security/encryption';
 import prisma from '../../../db.server';
+import { notificationService } from '../../notification/services/notification.service';
 
 export class CampaignService {
   private repository: CampaignRepository;
@@ -97,6 +98,12 @@ export class CampaignService {
       await this.repository.updateCampaign(campaignId, {
         status: 'FAILED',
       });
+      await notificationService.createNotification(
+        shop,
+        'Campaign Dispatch Failed',
+        `Campaign "${campaign.name}" failed to start because your WhatsApp configuration is incomplete.`,
+        'ERROR'
+      );
       return;
     }
 
@@ -162,6 +169,13 @@ export class CampaignService {
       sentCount: sent,
       failedCount: failed,
     });
+
+    await notificationService.createNotification(
+      shop,
+      'Campaign Completed',
+      `Campaign "${campaign.name}" completed sending. Sent: ${sent}, Failed: ${failed}.`,
+      'SUCCESS'
+    );
 
     console.log(`[CampaignService] Completed campaign ${campaignId}. Sent: ${sent}, Failed: ${failed}`);
   }
