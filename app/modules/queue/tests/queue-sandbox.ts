@@ -1,6 +1,6 @@
 import { whatsAppService } from '../../whatsapp/services/whatsapp.service';
 import { queueService } from '../services/queue.service';
-import { worker } from '../workers/queue.worker';
+import { stopWorker } from '../workers/queue.worker';
 import prisma from '../../../db.server';
 import { encrypt } from '../../../core/security/encryption';
 
@@ -78,7 +78,7 @@ async function runSandbox() {
   });
 
   await queueService.close();
-  await worker.close();
+  await stopWorker();
   // We need to disconnect the prisma client if needed, or close connections
   await prisma.$disconnect();
 

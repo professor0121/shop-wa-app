@@ -159,3 +159,18 @@ model Automation {
 
   @@unique([shop, triggerType])
 }
+
+model BackgroundJob {
+  id           String   @id @default(uuid())
+  type         String   // e.g. SYNC_PRODUCT, PROCESS_AUTOMATION, etc.
+  payload      Json     // payload data
+  status       String   // PENDING, PROCESSING, COMPLETED, FAILED
+  attempts     Int      @default(0)
+  maxAttempts  Int      @default(3)
+  errorMessage String?
+  runAt        DateTime @default(now()) // support delayed execution
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([status, runAt])
+}

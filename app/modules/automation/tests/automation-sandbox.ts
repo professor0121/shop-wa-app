@@ -2,7 +2,7 @@ import { whatsAppService } from '../../whatsapp/services/whatsapp.service';
 import { automationRepository } from '../repositories/automation.repository';
 import { checkoutService } from '../../order/services/checkout.service';
 import { queueService } from '../../queue/services/queue.service';
-import { worker } from '../../queue/workers/queue.worker';
+import { stopWorker } from '../../queue/workers/queue.worker';
 import prisma from '../../../db.server';
 import { encrypt } from '../../../core/security/encryption';
 
@@ -109,7 +109,7 @@ async function runSandbox() {
   });
 
   await queueService.close();
-  await worker.close();
+  await stopWorker();
   await prisma.$disconnect();
 
   if (success && sendPayload) {
