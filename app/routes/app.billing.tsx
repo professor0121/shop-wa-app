@@ -1,39 +1,31 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { useLoaderData, useFetcher } from 'react-router';
-import { authenticate } from '../shopify.server';
-import { MONTHLY_PLAN } from '../constants';
 import { useAppBridge } from '@shopify/app-bridge-react';
 import { useEffect } from 'react';
+import { billingService } from '../modules/billing/services/billing.service';
+import { MONTHLY_PLAN } from '../constants';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { billing } = await authenticate.admin(request);
-
   try {
-    const billingCheck = await billing.check({
-      plans: [MONTHLY_PLAN],
-      isTest: true,
-    });
+    const billingCheck = await billingService.checkBillingStatus(request);
 
     return Response.json({
       hasActivePayment: billingCheck.hasActivePayment,
       appSubscriptions: billingCheck.appSubscriptions,
     });
   } catch (error) {
+    if (error instanceof Response) throw error;
     console.error('[BillingRoute] Failed to check billing status:', error);
     return Response.json({ hasActivePayment: false, appSubscriptions: [] });
   }
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { billing } = await authenticate.admin(request);
   const formData = await request.formData();
   const actionType = formData.get('action');
 
   if (actionType === 'upgrade') {
-    return await billing.request({
-      plan: MONTHLY_PLAN,
-      isTest: true,
-    });
+    return await billingService.requestUpgrade(request);
   }
 
   return Response.json({ error: 'Invalid action' }, { status: 400 });
