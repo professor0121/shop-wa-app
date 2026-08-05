@@ -1,0 +1,60 @@
+=== WHATSAPP APP CONNECTION & SYNCHRONIZED DATA ===
+
+--- Configuration ---
+Shop Domain:      developmentstore-txduifzb.myshopify.com
+Phone ID:         1301851969672849
+WABA ID:          1543463290811479
+Verify Token:     wh_d236149b3119a9e52bab9727e1769bc3
+App Secret:       8590664034b24d27b3eab6d368e528a6
+Access Token:     EAAkBz6nfM9EBSLmk3ftiW2jyO9B4YXZCMaZBTJnFGsFUXlbqX45KtiymlMZCPQmX6bxbQ1hpTzZBqdWffBUtaoRf89X3HiES62izZBDFZCNOafxvI3RkDAMb1BgunuATzyVzq6BA4rlmmtwHUHvNGt5ktML18zAMioKBynFxPMvfZAcfoslDK41HIo9h6UPZAQZDZD
+Opt-In Keywords:  START,SUBSCRIBE
+Opt-Out Keywords: STOP,UNSUBSCRIBE
+Updated At:       2026-08-05T03:57:42.607Z
+
+--------------------
+
+--- WhatsApp Templates Sync Status ---
+Total Templates: 2
+
+Template #1:
+  ID:       1062729692875804
+  Name:     templage_na
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "header hai  ji ye",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Hello",
+            "type": "BODY"
+        }
+    ]
+
+Template #2:
+  ID:       1592292425595942
+  Name:     hello_world
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Hello World",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Welcome and congratulations!! This message demonstrates your ability to send a WhatsApp message notification from the Cloud API, hosted by Meta. Thank you for taking the time to test with us.",
+            "type": "BODY"
+        },
+        {
+            "text": "WhatsApp Business Platform sample message",
+            "type": "FOOTER"
+        }
+    ]
+
