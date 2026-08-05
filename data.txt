@@ -9,12 +9,12 @@ App Secret:       8590664034b24d27b3eab6d368e528a6
 Access Token:     EAAkBz6nfM9EBSLmk3ftiW2jyO9B4YXZCMaZBTJnFGsFUXlbqX45KtiymlMZCPQmX6bxbQ1hpTzZBqdWffBUtaoRf89X3HiES62izZBDFZCNOafxvI3RkDAMb1BgunuATzyVzq6BA4rlmmtwHUHvNGt5ktML18zAMioKBynFxPMvfZAcfoslDK41HIo9h6UPZAQZDZD
 Opt-In Keywords:  START,SUBSCRIBE
 Opt-Out Keywords: STOP,UNSUBSCRIBE
-Updated At:       2026-08-05T03:57:42.607Z
+Updated At:       2026-08-05T04:08:42.457Z
 
 --------------------
 
 --- WhatsApp Templates Sync Status ---
-Total Templates: 2
+Total Templates: 52
 
 Template #1:
   ID:       1062729692875804
@@ -54,6 +54,1156 @@ Template #2:
         },
         {
             "text": "WhatsApp Business Platform sample message",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #3:
+  ID:       mock_tpl_id_1000001
+  Name:     abandoned_cart_reminder
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "You left items in your cart!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Hello! We noticed you left some items in your shopping cart. Complete your order now and get free shipping with code FREESHIP.",
+            "type": "BODY"
+        },
+        {
+            "text": "Click below to resume checkout.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #4:
+  ID:       mock_tpl_id_1000002
+  Name:     order_confirmation
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Order Confirmed!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Thank you for your purchase! We have received your order and are preparing it. Your order number is #{{1}}.",
+            "type": "BODY"
+        },
+        {
+            "text": "View your order details anytime on our site.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #5:
+  ID:       mock_tpl_id_1000003
+  Name:     shipping_update
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Your order has shipped!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Great news! Your order #{{1}} has been shipped. You can track your shipment using tracking number: {{2}}.",
+            "type": "BODY"
+        },
+        {
+            "text": "Standard delivery takes 3-5 business days.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #6:
+  ID:       mock_tpl_id_1000004
+  Name:     delivery_delivered
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Delivered!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your package from order #{{1}} has been successfully delivered. We hope you love your new items!",
+            "type": "BODY"
+        },
+        {
+            "text": "Let us know if you have any questions.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #7:
+  ID:       mock_tpl_id_1000005
+  Name:     welcome_new_customer
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Welcome to the Club!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Thanks for signing up! Here is your exclusive 10% discount code for your first purchase: WELCOME10.",
+            "type": "BODY"
+        },
+        {
+            "text": "Valid on all items.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #8:
+  ID:       mock_tpl_id_1000006
+  Name:     birthday_coupon_gift
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Happy Birthday!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Happy Birthday from all of us! Enjoy a special gift: $15 off on your next purchase of $50 or more with code BDAYGIFT.",
+            "type": "BODY"
+        },
+        {
+            "text": "Exclusions apply.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #9:
+  ID:       mock_tpl_id_1000007
+  Name:     nps_survey_feedback
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "How did we do?",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Hi! On a scale of 0-10, how likely are you to recommend us to a friend or colleague? Tap a button below to let us know.",
+            "type": "BODY"
+        },
+        {
+            "text": "We appreciate your feedback.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #10:
+  ID:       mock_tpl_id_1000008
+  Name:     review_request_incentive
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Share your thoughts",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "How do you like your new items? Write a review on our website and get a $5 voucher for your next order.",
+            "type": "BODY"
+        },
+        {
+            "text": "Help other shoppers decide.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #11:
+  ID:       mock_tpl_id_1000009
+  Name:     back_in_stock_alert
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "It is back!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Good news! The item you wanted ({{1}}) is back in stock. Get yours now before it sells out again.",
+            "type": "BODY"
+        },
+        {
+            "text": "Limited stock available.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #12:
+  ID:       mock_tpl_id_1000010
+  Name:     flash_sale_announcement
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Flash Sale: 50% Off!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Hurry! For the next 4 hours only, get 50% off select products. Use code FLASH50 at checkout.",
+            "type": "BODY"
+        },
+        {
+            "text": "Sale ends tonight.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #13:
+  ID:       mock_tpl_id_1000011
+  Name:     new_product_arrival
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "New Arrivals!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Discover our latest collection fresh from the warehouse. Browse new arrivals today and stay ahead of the trends.",
+            "type": "BODY"
+        },
+        {
+            "text": "Shop now.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #14:
+  ID:       mock_tpl_id_1000012
+  Name:     personalized_upsell
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Perfect match for you",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Since you bought {{1}}, we think you might also love {{2}}. Check it out now and get 15% off.",
+            "type": "BODY"
+        },
+        {
+            "text": "Selected just for you.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #15:
+  ID:       mock_tpl_id_1000013
+  Name:     payment_failed_alert
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Payment Failed",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "We were unable to process your payment for order #{{1}}. Please update your billing details to secure your items.",
+            "type": "BODY"
+        },
+        {
+            "text": "Your order is on hold for 24 hours.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #16:
+  ID:       mock_tpl_id_1000014
+  Name:     payment_receipt
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Payment Received",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "We have successfully received your payment of {{1}} for invoice #{{2}}. Your order status is now Updated.",
+            "type": "BODY"
+        },
+        {
+            "text": "Thank you for your payment.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #17:
+  ID:       mock_tpl_id_1000015
+  Name:     subscription_renewal_notice
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Subscription Renewing Soon",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your subscription is scheduled to renew on {{1}}. A charge of {{2}} will be processed to your saved payment method.",
+            "type": "BODY"
+        },
+        {
+            "text": "Cancel or pause anytime before the renewal date.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #18:
+  ID:       mock_tpl_id_1000016
+  Name:     subscription_cancelled_confirm
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Subscription Cancelled",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "As requested, your subscription has been cancelled. You will continue to have access until the end of your billing cycle on {{1}}.",
+            "type": "BODY"
+        },
+        {
+            "text": "We are sorry to see you go.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #19:
+  ID:       mock_tpl_id_1000017
+  Name:     loyalty_points_update
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Points Earned!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "You just earned {{1}} points on your last order! Your current balance is {{2}} points. Redeem them on your next order.",
+            "type": "BODY"
+        },
+        {
+            "text": "Learn more about loyalty rewards.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #20:
+  ID:       mock_tpl_id_1000018
+  Name:     password_reset_request
+  Language: en
+  Category: AUTHENTICATION
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Password Reset",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "We received a request to reset your password. Use the following code to complete your reset: {{1}}.",
+            "type": "BODY"
+        },
+        {
+            "text": "If you did not request this, please ignore.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #21:
+  ID:       mock_tpl_id_1000019
+  Name:     one_time_passcode_otp
+  Language: en_US
+  Category: AUTHENTICATION
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Verification Code",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your one-time passcode for verification is: {{1}}. Do not share this code with anyone.",
+            "type": "BODY"
+        },
+        {
+            "text": "This code is valid for 10 minutes.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #22:
+  ID:       mock_tpl_id_1000020
+  Name:     vip_exclusive_access
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "VIP Pre-Access",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "As a valued VIP member, you get 24-hour early access to our seasonal clearance. Shop before everyone else!",
+            "type": "BODY"
+        },
+        {
+            "text": "Password: VIPONLY",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #23:
+  ID:       mock_tpl_id_1000021
+  Name:     support_ticket_created
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Support Request Received",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "We have received your support ticket #{{1}}. A support representative will respond within 24 hours.",
+            "type": "BODY"
+        },
+        {
+            "text": "Thank you for reaching out.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #24:
+  ID:       mock_tpl_id_1000022
+  Name:     support_ticket_resolved
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Support Ticket Resolved",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your support ticket #{{1}} has been marked as resolved. If you still need help, feel free to reply directly.",
+            "type": "BODY"
+        },
+        {
+            "text": "Rate your support experience.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #25:
+  ID:       mock_tpl_id_1000023
+  Name:     return_initiated_notice
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Return Initiated",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your return request for order #{{1}} has been approved. Please use the shipping label emailed to you.",
+            "type": "BODY"
+        },
+        {
+            "text": "Return packaging instructions enclosed.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #26:
+  ID:       mock_tpl_id_1000024
+  Name:     return_warehouse_received
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Return Received",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "We have received your returned package for order #{{1}} at our warehouse. We are currently inspecting the items.",
+            "type": "BODY"
+        },
+        {
+            "text": "Usually takes 1-2 business days.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #27:
+  ID:       mock_tpl_id_1000025
+  Name:     refund_processed_confirm
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Refund Processed",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "A refund of {{1}} has been successfully processed for order #{{2}}. The amount will appear in your account in 3-5 days.",
+            "type": "BODY"
+        },
+        {
+            "text": "Refunded to original payment method.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #28:
+  ID:       mock_tpl_id_1000026
+  Name:     warranty_registered_success
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Warranty Registered",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Congratulations! Your warranty registration for {{1}} was successful. Your coverage period is valid until {{2}}.",
+            "type": "BODY"
+        },
+        {
+            "text": "Keep this message for your reference.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #29:
+  ID:       mock_tpl_id_1000027
+  Name:     referral_program_invite
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Give $10, Get $10",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Share the love! Invite your friends to shop. They will get $10 off their first purchase, and you will get $10 when they buy.",
+            "type": "BODY"
+        },
+        {
+            "text": "Referral link inside.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #30:
+  ID:       mock_tpl_id_1000028
+  Name:     wishlist_price_drop
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Price Drop Alert!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "An item on your wishlist ({{1}}) has dropped in price from {{2}} to {{3}}! Grab it now before stock runs out.",
+            "type": "BODY"
+        },
+        {
+            "text": "Save on your favorites.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #31:
+  ID:       mock_tpl_id_1000029
+  Name:     winback_inactive_customer
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "We miss you!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "It has been a while since your last visit. We added new items you might love. Come back today and take 15% off with code MISSYOU.",
+            "type": "BODY"
+        },
+        {
+            "text": "Hope to see you soon!",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #32:
+  ID:       mock_tpl_id_1000030
+  Name:     pre_order_confirmation
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Pre-order Confirmed",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your pre-order for {{1}} is secured! We will notify you as soon as the stock arrives and is ready to ship.",
+            "type": "BODY"
+        },
+        {
+            "text": "Estimated release date: {{2}}.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #33:
+  ID:       mock_tpl_id_1000031
+  Name:     pre_order_shipping_status
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Pre-order Shipping Soon",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Good news! The release date for {{1}} is approaching and we will begin shipping orders next week.",
+            "type": "BODY"
+        },
+        {
+            "text": "Confirm your shipping address today.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #34:
+  ID:       mock_tpl_id_1000032
+  Name:     b2b_inquiry_received
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Wholesale Inquiry Received",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Thank you for your bulk order inquiry. Our sales manager will send you a custom wholesale quote shortly.",
+            "type": "BODY"
+        },
+        {
+            "text": "Usually responds in 4 hours.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #35:
+  ID:       mock_tpl_id_1000033
+  Name:     invoice_payment_reminder
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Payment Reminder",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Friendly reminder that invoice #{{1}} for {{2}} is due tomorrow. Please pay to avoid late fees.",
+            "type": "BODY"
+        },
+        {
+            "text": "Pay securely using the link.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #36:
+  ID:       mock_tpl_id_1000034
+  Name:     account_verified_welcome
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Account Verified!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your merchant profile has been successfully verified. You can now publish products and accept payments.",
+            "type": "BODY"
+        },
+        {
+            "text": "Welcome to the platform.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #37:
+  ID:       mock_tpl_id_1000035
+  Name:     instore_pickup_ready
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Ready for Pickup!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your order #{{1}} is ready for pickup at our {{2}} store location. Please bring a photo ID and order number.",
+            "type": "BODY"
+        },
+        {
+            "text": "Store hours: 9 AM - 8 PM.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #38:
+  ID:       mock_tpl_id_1000036
+  Name:     instore_pickup_completed
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Pickup Completed",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Thank you for picking up your order #{{1}}! We hope to see you in our store again soon.",
+            "type": "BODY"
+        },
+        {
+            "text": "Rate your pickup experience.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #39:
+  ID:       mock_tpl_id_1000037
+  Name:     delivery_driver_assigned
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Out for Delivery!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your delivery driver {{1}} has picked up your order #{{2}} and is on the way. Expected delivery: {{3}}.",
+            "type": "BODY"
+        },
+        {
+            "text": "Track driver location in real time.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #40:
+  ID:       mock_tpl_id_1000038
+  Name:     giftcard_purchase_confirm
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Gift Card Purchased",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your gift card purchase was successful. The digital gift card code is {{1}} for the amount of {{2}}.",
+            "type": "BODY"
+        },
+        {
+            "text": "Share this code with your recipient.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #41:
+  ID:       mock_tpl_id_1000039
+  Name:     giftcard_balance_alert
+  Language: en_US
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Gift Card Balance",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "You have an outstanding balance of {{1}} on your gift card (code ending in {{2}}). Use it before it expires!",
+            "type": "BODY"
+        },
+        {
+            "text": "Expiration date: {{3}}.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #42:
+  ID:       mock_tpl_id_1000040
+  Name:     replenish_low_stock_warning
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Time to restock?",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Based on your usage history, you might be running low on {{1}}. Order a replenishment today and save 5%.",
+            "type": "BODY"
+        },
+        {
+            "text": "One-click restock.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #43:
+  ID:       mock_tpl_id_1000041
+  Name:     whatsapp_community_join
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Join our Community",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Want sneak peeks, exclusive discounts, and tips? Join our official WhatsApp VIP community group!",
+            "type": "BODY"
+        },
+        {
+            "text": "Safe and secure group.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #44:
+  ID:       mock_tpl_id_1000042
+  Name:     app_download_promo
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Get the App",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Shop faster, track orders on the go, and get an extra 10% off your next order when you download our shopping app.",
+            "type": "BODY"
+        },
+        {
+            "text": "Available for iOS & Android.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #45:
+  ID:       mock_tpl_id_1000043
+  Name:     customer_feedback_followup
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Thank you for your feedback",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "We appreciate the feedback you shared. As a thank you, here is a discount coupon for your next purchase: FEEDBACK5.",
+            "type": "BODY"
+        },
+        {
+            "text": "Help us improve.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #46:
+  ID:       mock_tpl_id_1000044
+  Name:     black_friday_pre_access
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Black Friday VIP Sale",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Our biggest sale of the year begins tomorrow! As a loyalty member, use code BFPRE25 for 30% off site-wide now.",
+            "type": "BODY"
+        },
+        {
+            "text": "Sale expires when stock runs out.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #47:
+  ID:       mock_tpl_id_1000045
+  Name:     christmas_holiday_greet
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Merry Christmas!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Warmest holiday wishes to you and your family! Enjoy 15% off site-wide during our Holiday Sale. Code: MERRY15.",
+            "type": "BODY"
+        },
+        {
+            "text": "Merry Christmas and Happy New Year!",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #48:
+  ID:       mock_tpl_id_1000046
+  Name:     abandoned_checkout_coupon
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Did you forget something?",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "We saved your checkout. Finish placing your order within 1 hour and get a bonus 5% off code: RETURNING5.",
+            "type": "BODY"
+        },
+        {
+            "text": "Discount automatically applied.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #49:
+  ID:       mock_tpl_id_1000047
+  Name:     abandoned_browse_reminder
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Still interested?",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "We saw you looking at {{1}} earlier. It is one of our bestsellers! Take a look again and check reviews.",
+            "type": "BODY"
+        },
+        {
+            "text": "Shop with confidence.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #50:
+  ID:       mock_tpl_id_1000048
+  Name:     loyalty_tier_upgrade
+  Language: en
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Tier Upgraded!",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Congratulations! You have been upgraded to the Gold Tier in our Loyalty Club. You now earn 2x points on every order.",
+            "type": "BODY"
+        },
+        {
+            "text": "Unlock more rewards.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #51:
+  ID:       mock_tpl_id_1000049
+  Name:     store_event_rsvp
+  Language: en_US
+  Category: MARKETING
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Event RSVP Confirmation",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Thank you for RSVPing to our in-store launch event on {{1}}. Your entry ticket passcode is {{2}}.",
+            "type": "BODY"
+        },
+        {
+            "text": "Location details inside.",
+            "type": "FOOTER"
+        }
+    ]
+
+Template #52:
+  ID:       mock_tpl_id_1000050
+  Name:     subscription_payment_failed
+  Language: en
+  Category: UTILITY
+  Status:   APPROVED
+  Components:
+    [
+        {
+            "text": "Subscription Payment Declined",
+            "type": "HEADER",
+            "format": "TEXT"
+        },
+        {
+            "text": "Your subscription billing of {{1}} failed to process. We will re-attempt in 3 days. Please check your credit card.",
+            "type": "BODY"
+        },
+        {
+            "text": "Contact billing support if needed.",
             "type": "FOOTER"
         }
     ]
